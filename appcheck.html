@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--
+Hosung Hwang
+From various sources
+
+Setting URL Scheme
+iOS :
+http://www.idev101.com/code/Objective-C/custom_url_schemes.html
+
+Android :
+<activity android:name="MyApp" android:label="@string/app_name" 
+          android:screenOrientation="portrait"
+          android:launchMode="singleTop"
+          android:configChanges="orientation|keyboardHidden">
+
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+
+    <intent-filter>
+      <data android:scheme="myprotocol" />
+      <action android:name="android.intent.action.VIEW" />
+      <category android:name="android.intent.category.BROWSABLE" />
+      <category android:name="android.intent.category.DEFAULT" />
+    </intent-filter>
+</activity>
+-->
+<html>
+<head>
+	<meta charset="utf-8">
+
+<script type="text/javascript">
+		// Market address for android and iphone
+		var market_a = "market://details?id=com.facebook.katana";
+		var market_i = "https://itunes.apple.com/app/facebook/id284882215";
+
+		var IS_IPAD = navigator.userAgent.match(/iPad/i) != null,
+			IS_IPHONE = !IS_IPAD && ((navigator.userAgent.match(/iPhone/i) != null) || (navigator.userAgent.match(/iPod/i) != null)),
+			IS_IOS = IS_IPAD || IS_IPHONE,
+			IS_ANDROID = !IS_IOS && navigator.userAgent.match(/android/i) != null,
+			IS_MOBILE = IS_IOS || IS_ANDROID;
+
+		function checkAppInstall() {
+			//schema of the app
+            var url = "myprotocol://foo";
+			
+			if(IS_ANDROID) {
+				var invisible_div = document.getElementById("invisible_div");
+				invisible_div.innerHTML = "<iframe src=" + url + " onload='goMarket()'></iframe>";
+			} else if(IS_IOS) {
+				setTimeout( function() {
+					goMarket();
+				}, 1000);
+		 
+				location.href = url;
+			} else {
+				alert("android and iOS only");
+			}
+		 
+			return false;
+		}
+		 
+		// open market
+		function goMarket() {
+			if(IS_ANDROID) {
+				location.href=market_a;
+			} else if(IS_IOS) {
+				location.href=market_i;
+			} else {
+				// do nothing
+			}
+		}
+	</script>
+</head>
+
+<body>
+	<button onclick="checkAppInstall()">Check App Install</button><br>
+ 
+	<div id="invisible_div" style="display:none;"></div>
+	<div id="display"> </div>
+</body>  
+</html>
